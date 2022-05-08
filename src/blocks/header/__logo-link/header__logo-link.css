@@ -1,0 +1,15 @@
+.header__logo-link {
+    display: block;
+    margin-bottom: 41px;
+    width: max-content;
+}
+
+.header__logo-link:hover {
+    opacity: 0.5;
+}
+
+@media screen and (max-width: 500px) {
+    .header__logo-link {
+        margin-bottom: 31px;
+    }
+}

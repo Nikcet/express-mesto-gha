@@ -1,0 +1,12 @@
+.header__login-link {
+    display: block;
+    width: max-content;
+    color: #A9A9A9;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 1.21;
+}
+
+.header__login-link:hover {
+    opacity: 0.6;
+}

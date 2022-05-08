@@ -1,0 +1,9 @@
+.image-popup__description {
+    color: white;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.25;
+    max-width: 291px;
+    min-width: 241px;
+    margin: 0;
+}

@@ -1,0 +1,98 @@
+/* Начало общих свойств */
+
+@import url(vendor/normalize.css);
+@import url(vendor/fonts.css);
+@import url(blocks/page/page.css);
+/* Конец общих свойств */
+
+/* Начало header */
+
+@import url(blocks/header/header.css);
+@import url(blocks/header/__logo/header__logo.css);
+@import url(blocks/header/__logo-link/header__logo-link.css);
+@import url(blocks/header/__login-link/header__login-link.css);
+@import url(blocks/header/__email/header__email.css);
+@import url(blocks/header/__account-wrap/header__account-wrap.css);
+@import url(blocks/header/__btn-logout/header__btn-logout.css);
+/* Конец header */
+
+/* Начало profile */
+
+@import url(blocks/profile/profile.css);
+@import url(blocks/profile/__avatar/profile__avatar.css);
+@import url(blocks/profile/__description/profile__description.css);
+@import url(blocks/profile/__info/profile__info.css);
+@import url(blocks/profile/__edit-button/profile__edit-button.css);
+@import url(blocks/profile/__add-button/profile__add-button.css);
+@import url(blocks/profile/__name/profile__name.css);
+@import url(blocks/profile/__info-elems/profile__info-elems.css);
+@import url(blocks/profile/__info-wrap/profile__info-wrap.css);
+@import url(blocks/profile/__avatar-overley/profile__avatar-overley.css);
+@import url(blocks/profile/__avatar-edit-btn/profile__avatar-edit-btn.css);
+/* Конец profile */
+
+/* Начало elements */
+
+@import url(blocks/main/main.css);
+@import url(blocks/elements/elements.css);
+@import url(blocks/elements/__card/elements__card.css);
+@import url(blocks/elements/__delete/elements__delete.css);
+@import url(blocks/elements/__heart/elements__heart.css);
+@import url(blocks/elements/__heart-wrap/elements__heart-wrap.css);
+@import url(blocks/elements/__heart-number/elements__heart-number.css);
+@import url(blocks/elements/__heart/_active/elements__heart_active.css);
+@import url(blocks/elements/__image/elements__image.css);
+@import url(blocks/elements/__name/elements__name.css);
+@import url(blocks/elements/__wrap/elements__wrap.css);
+/* Конец elements */
+
+/* Начало image-popup */
+@import url(blocks/image-popup/image-popup.css);
+@import url(blocks/image-popup/__image/image-popup__image.css);
+@import url(blocks/image-popup/__description/image-popup__description.css);
+@import url(blocks/image-popup/__close-btn/image-popup__close-btn.css);
+@import url(blocks/image-popup/__wrap/image-popup__wrap.css);
+/* Конец image-popup */
+
+/* Начало popup */
+
+@import url(blocks/popup/popup.css);
+@import url(blocks/popup/__form/popup__form.css);
+@import url(blocks/popup/__form-error/popup__form-error.css);
+@import url(blocks/popup/__input/popup__input.css);
+@import url(blocks/popup/__submit-btn/popup__submit-btn.css);
+@import url(blocks/popup/__submit-btn/_disabled/popup__submit-btn_disabled.css);
+@import url(blocks/popup/__header/popup__header.css);
+@import url(blocks/popup/__container/popup__container.css);
+@import url(blocks/popup/_opened/popup_opened.css);
+@import url(blocks/popup/__close/popup__close.css);
+@import url(blocks/popup/__input/_no-valid/popup__input_no-valid.css);
+@import url(blocks/popup/__name-error/_active/popup__name-error_active.css);
+@import url(blocks/popup/__about-error/_active/popup__about-error_active.css);
+@import url(blocks/popup/__title-error/_active/popup__title-error_active.css);
+@import url(blocks/popup/__pic-link-error/_active/popup__pic-link-error_active.css);
+@import url(blocks/popup/__info/popup__info.css);
+@import url(blocks/popup/__info-image/popup__info-image.css);
+/* Конец popup */
+
+@import url(blocks/popup/__question/popup__question.css);
+@import url(blocks/popup/__delete-btn/popup__delete-btn.css);
+
+/* Начало footer */
+
+@import url(blocks/footer/footer.css);
+@import url(blocks/footer/__copyright/footer__copyright.css);
+/* Конец footer */
+
+/* Начало компонента Login */
+@import url(blocks/login/login.css);
+@import url(blocks/login/__button/login__button.css);
+@import url(blocks/login/__wrapper/login__wrapper.css);
+@import url(blocks/login/__form/login__form.css);
+@import url(blocks/login/__input/login__input.css);
+@import url(blocks/login/__header/login__header.css);
+@import url(blocks/login/__input-email/login__input-email.css);
+@import url(blocks/login/__input-password/login__input-password.css);
+@import url(blocks/login/__question/login__question.css);
+@import url(blocks/login/__link/login__link.css);
+/* Конец компонента Login */

@@ -1,34 +1,26 @@
 const express = require('express');
-// const cors = require("cors");
-const userRouter = require("./src/routes/users");
-const cardRouter = require("./src/routes/cards");
-const meRouter = require("./src/routes/me");
-const mongoose = require('mongoose');
+const userRouter = require('./src/routes/users');
+const cardRouter = require('./src/routes/cards');
+const { HardcodeUser } = require('./src/utils/HardcodeUser');
+const { cors } = require('./src/utils/cors');
+const { default: mongoose } = require('mongoose');
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
-main().catch(err => console.log(err));
+mongoInit().catch(err => console.log(err));
 
-async function main() {
+async function mongoInit() {
   await mongoose.connect('mongodb://localhost:27017/mestodb');
 }
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-// app.use(cors());
-
-app.use((req, res, next) => {
-  req.user = {
-    _id: '6277b4bf607fa1b0429f0092'
-  };
-
-  next();
-});
+app.use(cors);
+app.use(HardcodeUser);
 
 app.use('/', userRouter);
 app.use('/', cardRouter);
-// app.use('/users', meRouter);
 
 
 app.listen(PORT, () => {

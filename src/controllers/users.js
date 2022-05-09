@@ -1,11 +1,21 @@
-const user = require("../schemas/userSchema");
+const user = require('../models/userSchema');
+
+VALUE_ERROR = 400;
+ERROR_NOT_FOUND = 404;
+DEFAULT_ERROR = 500;
 
 // Создание пользователя
 module.exports.createUser = (req, res, next) => {
   const { name, about, avatar } = req.body;
   user.create({ name, about, avatar })
     .then(user => res.send({ data: user }))
-    .catch(err => res.status(500).send({ message: "Не создался пользователь в базе." }));
+    .catch(err => {
+      if (err.name === "ValidationError") {
+        res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные при создании пользователя.' })
+      } else {
+        res.status(DEFAULT_ERROR).send({ message: 'Ошибка по умолчанию.' })
+      }
+    });
 
 };
 
@@ -13,16 +23,22 @@ module.exports.createUser = (req, res, next) => {
 module.exports.getUsers = (req, res, next) => {
   user.find({})
     .then(users => res.send({ usersList: users }))
-    .catch(err => res.status(500).send({ message: "Не пришел список пользователей из базы." }));
+    .catch(err => res.status(DEFAULT_ERROR).send({ message: 'Не пришел список пользователей из базы.' }));
 
 }
 
 // Получение пользователя по id
 module.exports.getUser = (req, res, next) => {
-  if (req.params.id !== "me") {
+  if (req.params.id !== 'me') {
+
     user.findById(req.params.id)
-      .then(user => res.send({ user }))
-      .catch(err => res.status(500).send({ message: "Не пришел пользователь из базы." }));
+      .then(user => {
+        if (!user) {
+          return res.status(ERROR_NOT_FOUND).send({ message: 'Пользователь по указанному id не найден.' });
+        }
+        return res.send({ user });
+      })
+      .catch(err => res.status(DEFAULT_ERROR).send({ message: 'Ошибка по умолчанию.' }));
   }
 }
 
@@ -30,7 +46,7 @@ module.exports.getUser = (req, res, next) => {
 // module.exports.getMe = (req, res, next) => {
 //   user.findById(req.user._id)
 //     .then(user => res.send({ user }))
-//     .catch(err => res.status(500).send({ message: "Не пришел пользователь me из базы." }));
+//     .catch(err => res.status(DEFAULT_ERROR).send({ message: 'Не пришел пользователь me из базы.' }));
 // }
 
 // Обновление профиля
@@ -47,23 +63,19 @@ module.exports.updateProfile = (req, res) => {
       }
     })
     .catch(err => {
-      switch (err.status) {
-        case 400:
-          res.send({ message: "Переданы некорректные данные." });
-          break;
-        case 404:
-          res.send({ message: "Пользователь не найден." });
-          break;
-        default:
-          res.send({ status: err.status, name: err.name, message: "Данные не обновились." });
-          break;
+      if (err.name === 'ValidationError') {
+        res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные при обновлении профиля.' });
+      } else if (err.name === 'NotFoundError') {
+        res.status(ERROR_NOT_FOUND).send({ message: ' Пользователь с указанным _id не найден.' });
+      } else {
+        res.status(DEFAULT_ERROR).send({ message: 'Ошибка по-умолчанию.' });
       }
     })
 }
 
 // Обновление аватара
 module.exports.updateAvatar = (req, res) => {
-  const { avatar=null } = req.body;
+  const { avatar = null } = req.body;
   user.findByIdAndUpdate(req.user._id, { avatar },
     {
       new: true,
@@ -75,26 +87,12 @@ module.exports.updateAvatar = (req, res) => {
       }
     })
     .catch(err => {
-      switch (err.status) {
-        case 400:
-          res.send({ message: "Переданы некорректные данные." });
-          break;
-        case 404:
-          res.send({ message: "Пользователь не найден." });
-          break;
-        default:
-          res.send({ status: err.status, name: err.name, message: "Данные не обновились." });
-          break;
+      if (err.name === 'ValidationError') {
+        res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные при обновлении аватара.' });
+      } else if (err.name === 'NotFoundError') {
+        res.status(ERROR_NOT_FOUND).send({ message: ' Пользователь с указанным _id не найден.' });
+      } else {
+        res.status(DEFAULT_ERROR).send({ message: 'Ошибка по-умолчанию.' });
       }
     })
 }
-
-// // Ставит лайк карточке
-// module.exports.setLike = (req, res) => {
-
-// }
-
-// // Убирает лайк у карточки
-// module.exports.removeLike = () => {
-
-// }

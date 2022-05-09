@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const card = require('../models/cardSchema');
 
 VALUE_ERROR = 400;
@@ -8,8 +9,8 @@ DEFAULT_ERROR = 500;
 module.exports.createCard = (req, res) => {
   const { name, link } = req.body;
   card.create({ name, link, owner: req.user._id })
-    .then(card => res.send({ data: card }))
-    .catch(err => {
+    .then((newCard) => res.send({ data: newCard }))
+    .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные при создании карточки.' });
       } else {
@@ -22,39 +23,42 @@ module.exports.createCard = (req, res) => {
 module.exports.getCards = (req, res) => {
   card.find({})
     .populate('owner')
-    .then(cards => res.send({ cardList: cards }))
-    .catch(err => {
+    .then((cards) => res.send({ cardList: cards }))
+    .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные.' });
       } else {
         res.status(DEFAULT_ERROR).send({ message: 'Ошибка по-умолчанию.' });
       }
     });
-}
+};
 
 // Удаляет карточку
 module.exports.deleteCard = (req, res) => {
   card.findByIdAndRemove(req.params.id)
-    .then(card => res.send({ card, message: 'Карточка успешно удалилась.' }))
-    .catch(err => {
+    .then((deletedCard) => res.send({ deletedCard, message: 'Карточка успешно удалилась.' }))
+    .catch((err) => {
       if (err.name === 'NotFoundError') {
         res.status(ERROR_NOT_FOUND).send({ message: 'Карточка с указанным _id не найдена.' });
       } else {
         res.status(DEFAULT_ERROR).send({ message: err.message });
       }
     });
-}
+};
 
 // Ставит лайк карточке
 module.exports.setLike = (req, res) => {
-  card.findByIdAndUpdate(req.params.cardId,
+  card.findByIdAndUpdate(
+    req.params.cardId,
     {
       $addToSet: {
-        likes: req.user._id
-      }
-    }, { new: true })
-    .then(card => res.send(card))
-    .catch(err => {
+        likes: req.user._id,
+      },
+    },
+    { new: true },
+  )
+    .then((newCard) => res.send(newCard))
+    .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
       } else if (err.name === 'NotFoundError') {
@@ -63,18 +67,21 @@ module.exports.setLike = (req, res) => {
         res.status(DEFAULT_ERROR).send({ message: 'Ошибка по-умолчанию.' });
       }
     });
-}
+};
 
 // Убирает лайк у карточки
 module.exports.removeLike = (req, res) => {
-  card.findByIdAndUpdate(req.params.cardId,
+  card.findByIdAndUpdate(
+    req.params.cardId,
     {
       $pull: {
-        likes: req.user._id
-      }
-    }, { new: true })
-    .then(card => res.send(card))
-    .catch(err => {
+        likes: req.user._id,
+      },
+    },
+    { new: true },
+  )
+    .then((newCard) => res.send(newCard))
+    .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные для постановки/снятия лайка.' });
       } else if (err.name === 'NotFoundError') {
@@ -83,4 +90,4 @@ module.exports.removeLike = (req, res) => {
         res.status(DEFAULT_ERROR).send({ message: 'Ошибка по-умолчанию.' });
       }
     });
-}
+};

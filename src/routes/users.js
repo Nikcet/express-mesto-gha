@@ -4,7 +4,7 @@ const {
   getUser,
   getUsers,
   updateProfile,
-  updateAvatar
+  updateAvatar,
 } = require('../controllers/users');
 
 router.patch('/users/me', updateProfile);

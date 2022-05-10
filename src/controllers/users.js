@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-else-return */
 const User = require('../models/userSchema');
 
@@ -36,7 +37,13 @@ module.exports.getUser = (req, res) => {
         }
         return res.send({ user });
       })
-      .catch(() => res.status(DEFAULT_ERROR).send({ message: 'Ошибка по умолчанию.' }));
+      .catch((err) => {
+        if (err.name === 'CastError') {
+          return res.status(VALUE_ERROR).send({ message: 'Неправильный id пользователя.' });
+        } else {
+          return res.status(DEFAULT_ERROR).send({ message: 'Ошибка по умолчанию.' });
+        }
+      });
   }
 };
 
@@ -47,7 +54,8 @@ module.exports.updateProfile = (req, res) => {
     req.user._id,
     { name, about },
     {
-      new: true,
+      new: false,
+      runValidators: true,
     },
   )
     .then((user) => {

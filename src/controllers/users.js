@@ -1,9 +1,9 @@
-/* eslint-disable no-undef */
+/* eslint-disable no-else-return */
 const User = require('../models/userSchema');
 
-VALUE_ERROR = 400;
-ERROR_NOT_FOUND = 404;
-DEFAULT_ERROR = 500;
+const VALUE_ERROR = 400;
+const ERROR_NOT_FOUND = 404;
+const DEFAULT_ERROR = 500;
 
 // Создание пользователя
 module.exports.createUser = (req, res) => {
@@ -12,9 +12,9 @@ module.exports.createUser = (req, res) => {
     .then((newUser) => res.send({ data: newUser }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные при создании пользователя.' });
+        return res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные при создании пользователя.' });
       } else {
-        res.status(DEFAULT_ERROR).send({ message: 'Ошибка по умолчанию.' });
+        return res.status(DEFAULT_ERROR).send({ message: 'Ошибка по умолчанию.' });
       }
     });
 };
@@ -42,34 +42,31 @@ module.exports.getUser = (req, res) => {
 
 // Обновление профиля
 module.exports.updateProfile = (req, res) => {
-  const { name = null, about = null } = req.body;
+  const { name = req.params.name, about = req.params.about } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
     {
       new: true,
-      runValidators: true,
     },
   )
     .then((user) => {
-      if (user) {
-        res.send({ me: user });
-      }
+      res.send({ me: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные при обновлении профиля.' });
+        return res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные при обновлении профиля.' });
       } else if (err.name === 'NotFoundError') {
-        res.status(ERROR_NOT_FOUND).send({ message: ' Пользователь с указанным _id не найден.' });
+        return res.status(ERROR_NOT_FOUND).send({ message: ' Пользователь с указанным _id не найден.' });
       } else {
-        res.status(DEFAULT_ERROR).send({ message: 'Ошибка по-умолчанию.' });
+        return res.status(DEFAULT_ERROR).send({ message: 'Ошибка по-умолчанию.' });
       }
     });
 };
 
 // Обновление аватара
 module.exports.updateAvatar = (req, res) => {
-  const { avatar = null } = req.body;
+  const { avatar = req.params.avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
@@ -85,11 +82,11 @@ module.exports.updateAvatar = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные при обновлении аватара.' });
+        return res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные при обновлении аватара.' });
       } else if (err.name === 'NotFoundError') {
-        res.status(ERROR_NOT_FOUND).send({ message: ' Пользователь с указанным _id не найден.' });
+        return res.status(ERROR_NOT_FOUND).send({ message: ' Пользователь с указанным _id не найден.' });
       } else {
-        res.status(DEFAULT_ERROR).send({ message: 'Ошибка по-умолчанию.' });
+        return res.status(DEFAULT_ERROR).send({ message: 'Ошибка по-умолчанию.' });
       }
     });
 };

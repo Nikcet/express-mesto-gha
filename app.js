@@ -6,6 +6,7 @@ const cardRouter = require('./src/routes/cards');
 const { HardcodeUser } = require('./src/utils/HardcodeUser');
 const { cors } = require('./src/utils/cors');
 
+const ERROR_NOT_FOUND = 404;
 const { PORT = 3000 } = process.env;
 
 const app = express();
@@ -23,6 +24,9 @@ app.use(HardcodeUser);
 
 app.use('/', userRouter);
 app.use('/', cardRouter);
+app.use((req, res) => {
+  res.status(ERROR_NOT_FOUND).send({ message: 'Путь не найден.' });
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

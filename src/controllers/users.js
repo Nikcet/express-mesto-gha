@@ -54,7 +54,7 @@ module.exports.updateProfile = (req, res) => {
     req.user._id,
     { name, about },
     {
-      new: false,
+      new: true,
       runValidators: true,
     },
   )

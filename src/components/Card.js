@@ -1,26 +1,26 @@
-import React from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
+import React from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 export default function Card(props) {
-    const currentUser = React.useContext(CurrentUserContext);
+  const currentUser = React.useContext(CurrentUserContext);
 
-    const isOwn = props.card.owner._id === currentUser._id;
-    const isLiked = props.card.likes.some(like => like._id === currentUser._id);
-    const cardLikeButtonClassName = isLiked ? 'elements__heart_active' : '';
+  const isOwn = props.card.owner._id === currentUser._id;
+  const isLiked = props.card.likes.some((like) => like._id === currentUser._id);
+  const cardLikeButtonClassName = isLiked ? 'elements__heart_active' : '';
 
-    function handleClick() {
-        props.onCardClick(props.card);
-    }
+  function handleClick() {
+    props.onCardClick(props.card);
+  }
 
-    function handleLike() {
-        props.onCardLike(props.card);
-    }
+  function handleLike() {
+    props.onCardLike(props.card);
+  }
 
-    function handleDeleteCard() {
-        props.onDeleteCard(props.card);
-    }
+  function handleDeleteCard() {
+    props.onDeleteCard(props.card);
+  }
 
-    return (
+  return (
         <div className="elements__card">
             <img src={props.card.link}
                 alt={props.card.name}
@@ -35,5 +35,5 @@ export default function Card(props) {
                 </div>
             </div>
         </div>
-    )
+  );
 }

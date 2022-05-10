@@ -1,7 +1,7 @@
-import React from "react";
-import Card from "./Card";
-import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
-import { CardsContext } from "../contexts/CardsContext.js";
+import React from 'react';
+import Card from './Card';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import { CardsContext } from '../contexts/CardsContext.js';
 
 export default function Main(props) {
   const currentUser = React.useContext(CurrentUserContext);
@@ -40,8 +40,7 @@ export default function Main(props) {
         ></button>
       </section>
       <section className="elements">
-        {cards.map(item => {
-          return (
+        {cards.map((item) => (
             <Card
               key={item._id}
               card={item}
@@ -49,8 +48,7 @@ export default function Main(props) {
               onCardLike={props.onCardLike}
               onDeleteCard={props.onDeleteCard}
             />
-          )
-        })}
+        ))}
       </section>
     </main>
   );

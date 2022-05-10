@@ -1,21 +1,23 @@
-import React from "react";
-import "../index.css";
-import Header from "./Header.js";
-import Main from "./Main.js";
-import Footer from "./Footer.js";
-import PopupWithForm from "./PopupWithForm";
-import EditProfilePopup from "./EditProfilePopup";
-import ImagePopup from "./ImagePopup";
-import api from "../utils/Api";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { CardsContext } from "../contexts/CardsContext";
-import EditAvatarPopup from "./EditAvatarPopup";
-import AddPlacePopup from "./AddPlacePopup";
-import Loading from "../utils/Loading";
-import Login from "./Login";
-import Registration from "./Registration";
-import InfoTooltip from "./InfoTooltip";
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import React from 'react';
+import '../index.css';
+import {
+  Route, Switch, Redirect, useHistory,
+} from 'react-router-dom';
+import Header from './Header.js';
+import Main from './Main.js';
+import Footer from './Footer.js';
+import PopupWithForm from './PopupWithForm';
+import EditProfilePopup from './EditProfilePopup';
+import ImagePopup from './ImagePopup';
+import api from '../utils/Api';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { CardsContext } from '../contexts/CardsContext';
+import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
+import Loading from '../utils/Loading';
+import Login from './Login';
+import Registration from './Registration';
+import InfoTooltip from './InfoTooltip';
 import * as auth from '../utils/Auth';
 
 export function App() {
@@ -25,7 +27,7 @@ export function App() {
     avatar: '',
     cohort: '',
     name: '',
-  }
+  };
   const [currentUser, setCurrentUser] = React.useState(defaultUser);
   const [cardsList, setCardsList] = React.useState([]);
 
@@ -47,23 +49,21 @@ export function App() {
   // Монтирование информации о пользователе
   React.useEffect(() => {
     Promise.resolve(api.getUserInfo())
-      .then(dataUser => {
+      .then((dataUser) => {
         setCurrentUser(dataUser);
       })
-      .catch(err =>
-        console.log("Что-то не так с информацией пользователя.", err)
-      )
+      .catch((err) => console.log('Что-то не так с информацией пользователя.', err));
   }, []);
 
   // Монтирование карточек
   React.useEffect(() => {
     Promise.resolve(api.getCards())
-      .then(dataCards => {
+      .then((dataCards) => {
         setCardsList(dataCards);
       })
-      .catch(err => {
-        console.log("Что-то не так с карточками.", err)
-      })
+      .catch((err) => {
+        console.log('Что-то не так с карточками.', err);
+      });
   }, []);
 
   // Автоматически заходит, если в localStorage есть подходящий токен
@@ -92,7 +92,7 @@ export function App() {
 
   function handleCardClick(cardInfo) {
     setSelectedCard({
-      ...cardInfo
+      ...cardInfo,
     });
   }
 
@@ -109,47 +109,47 @@ export function App() {
   function handleUpdateUser(datas) {
     Loading(true, activePopup);
     api.sendProfileDatasToServer(datas.name, datas.about)
-      .then(profileDatas => {
+      .then((profileDatas) => {
         setCurrentUser(profileDatas);
         closeAllPopups();
       })
-      .catch(err => { console.log("Что-то не так с отправкой данных на сервер", err) })
-      .finally(() => { Loading(false, activePopup) })
+      .catch((err) => { console.log('Что-то не так с отправкой данных на сервер', err); })
+      .finally(() => { Loading(false, activePopup); });
   }
 
   // Обновляет аватар
   function handleUpdateAvatar({ avatar }) {
     Loading(true, activePopup);
     api.sendAvatarToServer(avatar)
-      .then(user => {
+      .then((user) => {
         setCurrentUser(user);
         closeAllPopups();
       })
-      .catch(err => { console.log("Не обновляется аватар", err) })
-      .finally(() => { Loading(false, activePopup) })
+      .catch((err) => { console.log('Не обновляется аватар', err); })
+      .finally(() => { Loading(false, activePopup); });
   }
 
   // Добавляет карточку
   function handleAddPlaceSubmit(card) {
     Loading(true, activePopup);
     api.postCard(card)
-      .then(newCard => {
+      .then((newCard) => {
         setCardsList([newCard, ...cardsList]);
         closeAllPopups();
       })
-      .catch(err => { console.log("Не добавляется карточка", err) })
-      .finally(() => { Loading(false, activePopup) })
+      .catch((err) => { console.log('Не добавляется карточка', err); })
+      .finally(() => { Loading(false, activePopup); });
   }
 
   // Лайки
   function handleCardLike(card) {
-    const isLiked = card.likes.some(like => like._id === currentUser._id);
+    const isLiked = card.likes.some((like) => like._id === currentUser._id);
 
     api.changeLikeCardStatus(card._id, !isLiked)
-      .then(newCard => {
-        setCardsList(state => state.map(item => item._id === card._id ? newCard : item));
+      .then((newCard) => {
+        setCardsList((state) => state.map((item) => (item._id === card._id ? newCard : item)));
       })
-      .catch(err => { console.log("Лайки не работают", err) })
+      .catch((err) => { console.log('Лайки не работают', err); });
   }
 
   // Удаление карточек
@@ -157,10 +157,10 @@ export function App() {
     api.deleteCard(card._id)
       .then(() => {
         api.getCards()
-          .then(newCards => setCardsList(newCards))
-          .catch(err => { console.log("Не получаются карточки", err) })
+          .then((newCards) => setCardsList(newCards))
+          .catch((err) => { console.log('Не получаются карточки', err); });
       })
-      .catch(err => { console.log("Не удаляется карточка", err) })
+      .catch((err) => { console.log('Не удаляется карточка', err); });
   }
 
   // Регистрация
@@ -170,10 +170,10 @@ export function App() {
         setIsSuccessRegistration(true);
         handleRegisterPopup();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('Не зарегистрировался ', err);
         handleRegisterPopup();
-      })
+      });
     history.push('/sign-in');
   }
 
@@ -185,7 +185,7 @@ export function App() {
           signIn();
         }
       })
-      .catch(err => { console.log('Не авторизовался ', err) });
+      .catch((err) => { console.log('Не авторизовался ', err); });
   }
 
   // Вход
@@ -194,11 +194,11 @@ export function App() {
     if (token) {
       history.push('/');
       auth.login(token)
-        .then(data => {
+        .then((data) => {
           setLoggedIn(true);
           setEmail(data.data.email);
         })
-        .catch(err => { console.log('Что-то не так с токеном', err) })
+        .catch((err) => { console.log('Что-то не так с токеном', err); });
     } else {
       setLoggedIn(false);
     }

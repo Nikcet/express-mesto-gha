@@ -2,25 +2,25 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
 export default function EditAvatarPopup(props) {
-    const [avatar, setAvatar] = React.useState('');
+  const [avatar, setAvatar] = React.useState('');
 
-    React.useEffect(() => {
-        setAvatar('');
-    }, [props.isOpen])
+  React.useEffect(() => {
+    setAvatar('');
+  }, [props.isOpen]);
 
-    function handleSubmit(event) {
-        event.preventDefault();
+  function handleSubmit(event) {
+    event.preventDefault();
 
-        props.onUpdateAvatar({
-            avatar
-        })
-    }
+    props.onUpdateAvatar({
+      avatar,
+    });
+  }
 
-    function handleAvatarLink(event) {
-        setAvatar(event.target.value);
-    }
+  function handleAvatarLink(event) {
+    setAvatar(event.target.value);
+  }
 
-    return (
+  return (
         <PopupWithForm
             title="Обновить аватар"
             name="update-avatar"
@@ -41,5 +41,5 @@ export default function EditAvatarPopup(props) {
             />
             <span className="popup__form-error popup__pic-link-error"></span>
         </PopupWithForm>
-    )
+  );
 }

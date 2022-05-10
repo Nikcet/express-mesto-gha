@@ -1,31 +1,31 @@
-import React from "react";
-import PopupWithForm from "./PopupWithForm";
+import React from 'react';
+import PopupWithForm from './PopupWithForm';
 
 export default function AddPlacePopup(props) {
-    const [name, setName] = React.useState('');
-    const [link, setLink] = React.useState('');
+  const [name, setName] = React.useState('');
+  const [link, setLink] = React.useState('');
 
-    React.useEffect(() => {
-        setName('');
-        setLink('');
-    }, [props.isOpen]);
+  React.useEffect(() => {
+    setName('');
+    setLink('');
+  }, [props.isOpen]);
 
-    function handleSubmit(event) {
-        event.preventDefault();
+  function handleSubmit(event) {
+    event.preventDefault();
 
-        props.onAddPlace({
-            name,
-            link,
-        })
-    }
+    props.onAddPlace({
+      name,
+      link,
+    });
+  }
 
-    function handleChange(event) {
-        const target = event.target;
-        const value = target.value;
-        target.name === 'name' ? setName(value) : setLink(value);
-    }
+  function handleChange(event) {
+    const { target } = event;
+    const { value } = target;
+    target.name === 'name' ? setName(value) : setLink(value);
+  }
 
-    return (
+  return (
         <PopupWithForm
             title="Новое место"
             name="add-card"
@@ -60,5 +60,5 @@ export default function AddPlacePopup(props) {
             />
             <span className="popup__form-error popup__pic-link-error"></span>
         </PopupWithForm>
-    )
+  );
 }

@@ -1,30 +1,30 @@
-import React from "react";
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Registration(props) {
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
-    function handleChange(event) {
-        const target = event.target;
-        const value = target.value;
-        target.name === 'email-input' ? setEmail(value) : setPassword(value);
-    }
+  function handleChange(event) {
+    const { target } = event;
+    const { value } = target;
+    target.name === 'email-input' ? setEmail(value) : setPassword(value);
+  }
 
-    function handleSubmit(event) {
-        event.preventDefault();
+  function handleSubmit(event) {
+    event.preventDefault();
 
-        props.onRegister({
-            email,
-            password,
-        });
-    }
+    props.onRegister({
+      email,
+      password,
+    });
+  }
 
-    React.useEffect(() => {
-        props.onLoad(false);
-    }, [])
+  React.useEffect(() => {
+    props.onLoad(false);
+  }, []);
 
-    return (
+  return (
         <div className="login">
             <div className="login__wrapper">
                 <h2 className="login__header">Регистрация</h2>
@@ -61,5 +61,5 @@ export default function Registration(props) {
                 </form>
             </div>
         </div>
-    )
+  );
 }

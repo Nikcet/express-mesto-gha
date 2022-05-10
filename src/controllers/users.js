@@ -59,7 +59,7 @@ module.exports.updateProfile = (req, res) => {
     },
   )
     .then((user) => {
-      res.send({ me: user });
+      res.send({ me: user, message: 'Профиль пользователя обновлен.' });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

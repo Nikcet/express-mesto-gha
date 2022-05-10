@@ -1,3 +1,4 @@
+/* eslint-disable prefer-promise-reject-errors */
 export const URL = 'https://auth.nomoreparties.co';
 
 function onResponse(res) {

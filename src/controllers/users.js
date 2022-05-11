@@ -74,7 +74,7 @@ module.exports.updateProfile = (req, res) => {
 
 // Обновление аватара
 module.exports.updateAvatar = (req, res) => {
-  const { avatar = req.params.avatar } = req.body;
+  const { avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },

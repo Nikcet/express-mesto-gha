@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable no-else-return */
-const card = require('../models/cardSchema');
+const Card = require('../models/cardSchema');
 
 const VALUE_ERROR = 400;
 const ERROR_NOT_FOUND = 404;
@@ -9,7 +9,7 @@ const DEFAULT_ERROR = 500;
 // Создает карточку
 module.exports.createCard = (req, res) => {
   const { name, link } = req.body;
-  card.create({ name, link, owner: req.user._id })
+  Card.create({ name, link, owner: req.user._id })
     .then((newCard) => res.send({ data: newCard }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -22,7 +22,7 @@ module.exports.createCard = (req, res) => {
 
 // Получает список карточек
 module.exports.getCards = (req, res) => {
-  card.find({})
+  Card.find({})
     .populate('owner')
     .then((cards) => res.send({ cardList: cards }))
     .catch((err) => {
@@ -36,7 +36,7 @@ module.exports.getCards = (req, res) => {
 
 // Удаляет карточку
 module.exports.deleteCard = (req, res) => {
-  card.findByIdAndRemove(req.params.id)
+  Card.findByIdAndRemove(req.params.id)
     .then((deletedCard) => res.send({ deletedCard, message: 'Карточка успешно удалилась.' }))
     .catch((err) => {
       if (err.name === 'NotFoundError') {
@@ -49,7 +49,7 @@ module.exports.deleteCard = (req, res) => {
 
 // Ставит лайк карточке
 module.exports.setLike = (req, res) => {
-  card.findByIdAndUpdate(
+  Card.findByIdAndUpdate(
     req.params.cardId,
     {
       $addToSet: {
@@ -58,7 +58,13 @@ module.exports.setLike = (req, res) => {
     },
     { new: true },
   )
-    .then((newCard) => res.send(newCard))
+    .then((newCard) => {
+      if (newCard) {
+        return res.send({ message: 'ОК' });
+      } else {
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Передан несуществующий _id карточки. ' });
+      }
+    })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         return res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
@@ -67,13 +73,12 @@ module.exports.setLike = (req, res) => {
       } else {
         return res.status(DEFAULT_ERROR).send({ message: 'Ошибка по-умолчанию.' });
       }
-      // res.send(err);
     });
 };
 
 // Убирает лайк у карточки
 module.exports.removeLike = (req, res) => {
-  card.findByIdAndUpdate(
+  Card.findByIdAndUpdate(
     req.params.cardId,
     {
       $pull: {
@@ -82,8 +87,12 @@ module.exports.removeLike = (req, res) => {
     },
     { new: true },
   )
-    .then(() => {
-
+    .then((newCard) => {
+      if (newCard) {
+        return res.send({ message: 'ОК' });
+      } else {
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Передан несуществующий _id карточки. ' });
+      }
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {

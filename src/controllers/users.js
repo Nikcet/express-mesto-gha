@@ -58,8 +58,8 @@ module.exports.updateProfile = (req, res) => {
       runValidators: true,
     },
   )
-    .then((user) => {
-      res.send({ me: user, message: 'Профиль пользователя обновлен.' });
+    .then(() => {
+      res.send({ message: 'Профиль пользователя обновлен.' });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -83,8 +83,8 @@ module.exports.updateAvatar = (req, res) => {
       runValidators: true,
     },
   )
-    .then((user) => {
-      res.send({ me: user, message: 'Аватар пользователя обновлен.' });
+    .then(() => {
+      res.send({ message: 'Аватар пользователя обновлен.' });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

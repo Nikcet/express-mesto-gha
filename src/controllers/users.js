@@ -79,7 +79,7 @@ module.exports.updateAvatar = (req, res) => {
     req.user._id,
     { avatar },
     {
-      new: true,
+      new: false,
       runValidators: true,
     },
   )

@@ -37,12 +37,18 @@ module.exports.getCards = (req, res) => {
 // Удаляет карточку
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.id)
-    .then((deletedCard) => res.send({ deletedCard, message: 'Карточка успешно удалилась.' }))
+    .then((deletedCard) => {
+      if (deletedCard) {
+        return res.send({ deletedCard, message: 'Карточка успешно удалилась.' });
+      } else {
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Карточка с указанным _id не найдена.' });
+      }
+    })
     .catch((err) => {
-      if (err.name === 'NotFoundError') {
+      if (err.name === 'CastError' || err.name === 'NotFoundError') {
         return res.status(ERROR_NOT_FOUND).send({ message: 'Карточка с указанным _id не найдена.' });
       } else {
-        return res.status(DEFAULT_ERROR).send({ message: err.message });
+        return res.status(DEFAULT_ERROR).send({ message: 'Ошибка по-умолчанию.' });
       }
     });
 };

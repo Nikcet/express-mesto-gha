@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-else-return */
 const card = require('../models/cardSchema');
 
@@ -59,13 +60,14 @@ module.exports.setLike = (req, res) => {
   )
     .then((newCard) => res.send(newCard))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         return res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
       } else if (err.name === 'NotFoundError') {
         return res.status(ERROR_NOT_FOUND).send({ message: 'Передан несуществующий _id карточки. ' });
       } else {
         return res.status(DEFAULT_ERROR).send({ message: 'Ошибка по-умолчанию.' });
       }
+      // res.send(err);
     });
 };
 
@@ -80,9 +82,11 @@ module.exports.removeLike = (req, res) => {
     },
     { new: true },
   )
-    .then((newCard) => res.send(newCard))
+    .then(() => {
+
+    })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         return res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные для постановки/снятия лайка.' });
       } else if (err.name === 'NotFoundError') {
         return res.status(ERROR_NOT_FOUND).send({ message: 'Передан несуществующий _id карточки. ' });

@@ -84,7 +84,7 @@ module.exports.updateAvatar = (req, res) => {
     },
   )
     .then((user) => {
-      res.send(user.avatar);
+      res.send({ avatar: user.avatar });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 const express = require('express');
 const { default: mongoose } = require('mongoose');
+const helmet = require('helmet');
 const userRouter = require('./src/routes/users');
 const cardRouter = require('./src/routes/cards');
 const { HardcodeUser } = require('./src/utils/HardcodeUser');
@@ -21,6 +22,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors);
 app.use(HardcodeUser);
+
+app.use(helmet());
 
 app.use('/', userRouter);
 app.use('/', cardRouter);

@@ -84,7 +84,11 @@ module.exports.updateAvatar = (req, res) => {
     },
   )
     .then((user) => {
-      res.send({ avatar: user.avatar });
+      if (user.avatar) {
+        return res.send({ avatar: user.avatar });
+      } else {
+        return res.status(VALUE_ERROR).send({ message: 'Переданы некорректные данные при обновлении аватара.' });
+      }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

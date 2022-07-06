@@ -26,7 +26,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors);
 app.use(helmet());
-// app.use(HardcodeUser);
 
 app.use('/', userRouter);
 app.use('/', cardRouter);

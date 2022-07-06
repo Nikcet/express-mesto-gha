@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-// const crypto = require('crypto');
 const validator = require('validator');
 const User = require('../models/userSchema');
 const { VALUE_ERROR, AUTH_ERROR, ERROR_NOT_FOUND, DEFAULT_ERROR } = require('../utils/errorConstants');
@@ -10,6 +9,7 @@ module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
+
   bcrypt.hash(password, 10)
     .then((hash) => {
       if (validator.isEmail(email)) {
@@ -17,7 +17,7 @@ module.exports.createUser = (req, res, next) => {
           name, about, avatar, email, password: hash,
         });
       }
-      throw new Error('Что-то не так с адресом электронной почты');
+      next(new Error('Что-то не так с адресом электронной почты'));
       // return res.status(VALUE_ERROR).send({ message: 'Что-то не так с адресом электронной почты' });
     })
     .then((newUser) => res.send({ data: newUser }))
@@ -155,10 +155,9 @@ module.exports.login = (req, res, next) => {
             httpOnly: true,
             sameSite: true,
             secure: true
-          },
+          }
         )
-      // .end();
-      res.send({ 'token': token });
+        .end();
     })
     .catch((err) => {
       res.status(AUTH_ERROR).send({ message: err.message });

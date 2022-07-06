@@ -6,10 +6,8 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const userRouter = require('./src/routes/users');
 const cardRouter = require('./src/routes/cards');
-const { HardcodeUser } = require('./src/utils/HardcodeUser');
-// const errorsProc = require('./src/utils/errorsProc');
 const { cors } = require('./src/utils/cors');
-const { VALUE_ERROR, ERROR_NOT_FOUND, DEFAULT_ERROR } = require('./src/utils/errorConstants');
+const { ERROR_NOT_FOUND } = require('./src/utils/errorConstants');
 
 const { PORT = 3000 } = process.env;
 
@@ -35,15 +33,13 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.log(err.name);
-  if (err.name === 'CastError' || err.name === 'ValidationError' || err.name === 'Error'){
-    res.status(VALUE_ERROR).send({ message: err.message });
-  } else if (err.name === 'ErrorDocument') {
-    res.status(ERROR_NOT_FOUND).send({ message: err.message });
-  }
-  else {
-    res.status(DEFAULT_ERROR).send({ message: err.message });
-  }
+  const { statusCode = 500, message } = err;
+
+  res.status(statusCode).send({
+    message: statusCode === 500
+      ? 'На сервере произошла ошибка'
+      : message
+  });
 });
 
 app.listen(PORT, () => {

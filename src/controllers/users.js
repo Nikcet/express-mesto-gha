@@ -15,16 +15,23 @@ module.exports.createUser = (req, res, next) => {
 
   bcrypt.hash(password, 10)
     .then((hash) => {
-      if (validator.isEmail(email)) {
-        return User.create({
-          name, about, avatar, email, password: hash,
-        });
+      if (!validator.isEmail(email)) {
+        throw new ValueError('Переданы некорректные данные при создании пользователя');
       }
-      throw new ValueError('Переданы некорректные данные при создании пользователя');
-      // return res.status(VALUE_ERROR).send({ message: 'Что-то не так с адресом электронной почты' });
+
+      return User.create({
+        name, about, avatar, email, password: hash,
+      });
     })
-    .then((newUser) => res.send({ data: newUser }))
-    .catch(next);
+    .then((newUser) => {
+      if (!newUser) {
+        throw new Error();
+      }
+      res.send({ data: newUser })
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 };
 
 // Получение списка пользователей
@@ -122,6 +129,10 @@ module.exports.login = (req, res, next) => {
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' }
       );
+      if (!token) {
+        throw new AuthError('Не удалось авторизоваться');
+      }
+      console.log(token);
       res
         .cookie(
           'jwt',
@@ -134,7 +145,6 @@ module.exports.login = (req, res, next) => {
           }
         )
         .end();
-        throw new AuthError('Не удалось авторизоваться');
     })
     .catch(next);
 };

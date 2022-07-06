@@ -4,6 +4,7 @@ const express = require('express');
 const { default: mongoose } = require('mongoose');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const { errors } = require('celebrate');
 const userRouter = require('./src/routes/users');
 const cardRouter = require('./src/routes/cards');
 const { cors } = require('./src/utils/cors');
@@ -31,6 +32,8 @@ app.use('/', cardRouter);
 app.use((req, res) => {
   res.status(ERROR_NOT_FOUND).send({ message: 'Путь не найден.' });
 });
+
+app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;

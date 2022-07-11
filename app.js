@@ -9,6 +9,7 @@ const userRouter = require('./src/routes/users');
 const cardRouter = require('./src/routes/cards');
 const { cors } = require('./src/utils/cors');
 const { ERROR_NOT_FOUND } = require('./src/utils/errorConstants');
+const NotFoundError = require('./src/errors/not-found-error');
 
 const { PORT = 3000 } = process.env;
 
@@ -29,8 +30,8 @@ app.use(helmet());
 app.use('/', userRouter);
 app.use('/', cardRouter);
 
-app.use((req, res) => {
-  res.status(ERROR_NOT_FOUND).send({ message: 'Путь не найден.' });
+app.use((req, res, next) => {
+  next(new NotFoundError('Путь не найден'));
 });
 
 app.use(errors());

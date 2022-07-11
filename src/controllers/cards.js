@@ -3,19 +3,20 @@ const Card = require('../models/cardSchema');
 
 const { ValueError } = require('../errors/value-error');
 const { NotFoundError } = require('../errors/not-found-error');
+const { ForbiddenError } = require('../errors/forbidden-error');
 
 // Создает карточку
 module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
     .then((newCard) => {
-      if (!newCard) {
-        throw new ValueError('Переданы некорректные данные при создании карточки');
-      }
-
       res.send({ data: newCard })
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new ValueError('Переданы некорректные данные при создании карточки'));
+      }
+    });
 };
 
 // Получает список карточек
@@ -23,9 +24,6 @@ module.exports.getCards = (req, res, next) => {
   Card.find({})
     .populate('owner')
     .then((cards) => {
-      if (!cards) {
-        throw new ValueError('Переданы некорректные данные');
-      }
       res.send({ cardList: cards })
     })
     .catch(next);
@@ -33,13 +31,15 @@ module.exports.getCards = (req, res, next) => {
 
 // Удаляет карточку
 module.exports.deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.id)
-    .then((deletedCard) => {
-      if (!deletedCard) {
-        throw new NotFoundError('Карточка с указанным id не найдена');
+  const { id } = req.params;
+  Card.findById(id)
+    .onFail(() => new NotFoundError('Карточка по указанному id не найдена'))
+    .then((card) => {
+      if (card.owner.equals(req.user._id)) {
+        return next(new ForbiddenError('Нельзя удалить чужую карточку'));
       }
-
-      return res.send({ deletedCard, message: 'Карточка успешно удалилась.' });
+      return card.remove()
+        .then(() => res.send({ message: 'Карточка успешно удалилась' }));
     })
     .catch(next);
 };

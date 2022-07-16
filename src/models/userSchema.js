@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const validator = require('validator');
+const AuthError = require('../errors/authorization-error');
 const ValueError = require('../errors/value-error');
 
 const userSchema = new mongoose.Schema({
@@ -24,37 +26,43 @@ const userSchema = new mongoose.Schema({
         return /(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$#?/.test(value)
       },
       message: 'Не валидная ссылка на изображение'
-    }
+    },
   },
   email: {
     type: String,
     required: true,
     unique: true,
+    validate: {
+      validator: function (value) {
+        if (!validator.isEmail(value)) {
+          throw new ValueError('Не правильный Email');
+        } else {
+          return value;
+        }
+      }
+    }
   },
   password: {
     type: String,
     required: true,
     select: false,
-    minlength: 8,
   }
 });
 
-userSchema.statics.findUserByCredentials = function (email, password, next) {
+userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new ValueError('Неправильные почта или пароль');
+        throw new AuthError('Неправильные почта или пароль');
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new ValueError('Неправильные почта или пароль');
+            throw new AuthError('Неправильные почта или пароль');
           }
           return user;
         })
-        .catch(next);
     })
-    .catch(next);
 }
 
 module.exports = mongoose.model('user', userSchema);

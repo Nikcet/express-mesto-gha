@@ -7,8 +7,8 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const userRouter = require('./src/routes/users');
 const cardRouter = require('./src/routes/cards');
+const loginRouter = require('./src/routes/login');
 const { cors } = require('./src/utils/cors');
-const { ERROR_NOT_FOUND } = require('./src/utils/errorConstants');
 const NotFoundError = require('./src/errors/not-found-error');
 
 const { PORT = 3000 } = process.env;
@@ -27,6 +27,7 @@ app.use(cookieParser());
 app.use(cors);
 app.use(helmet());
 
+app.use('/', loginRouter);
 app.use('/', userRouter);
 app.use('/', cardRouter);
 

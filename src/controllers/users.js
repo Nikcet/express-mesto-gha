@@ -2,10 +2,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
 const User = require('../models/userSchema');
-const { AuthError } = require('../errors/authorization-error');
-const { ValueError } = require('../errors/value-error');
-const { NotFoundError } = require('../errors/not-found-error');
-const { BadRequestError } = require('../errors/bad-request-error');
+const AuthError = require('../errors/authorization-error');
+const ValueError = require('../errors/value-error');
+const NotFoundError = require('../errors/not-found-error');
+const BadRequestError = require('../errors/bad-request-error');
 
 
 // Создание пользователя
@@ -18,25 +18,26 @@ module.exports.createUser = (req, res, next) => {
     .then((hash) => {
       if (!validator.isEmail(email)) {
         throw new ValueError('Переданы некорректные данные при создании пользователя');
-      } else {
-        return User.create({
-          name, about, avatar, email, password: hash,
-        });
       }
+
+      if (User.findUserByEmail) {
+        throw new BadRequestError('Такой пользователь уже существует');
+      }
+
+      User.create({
+        name, about, avatar, email, password: hash,
+      })
+        .then((newUser) => {
+          if (!newUser) {
+            throw new ValueError('Переданы некорректные данные при создании пользователя');
+          }
+          res.send({ data: { name, about, avatar, email } });
+        })
+        .catch(next);
+
     })
-    .then((newUser) => {
-      if (!newUser) {
-        throw new ValueError('Переданы некорректные данные при создании пользователя');
-      }
-      res.send({ data: { name, about, avatar, email } });
-    })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Пользователь с таким email уже существует'));
-      } else {
-        next(err);
-      }
-    });
+    .catch(next);
+
 };
 
 // Получение списка пользователей
@@ -45,7 +46,10 @@ module.exports.getUsers = (req, res, next) => {
     .then((users) => {
       res.send({ usersList: users });
     })
-    .catch(next);
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
 };
 
 // Получение пользователя по id
@@ -54,15 +58,19 @@ module.exports.getUser = (req, res, next) => {
     User.findById(id)
       .then((user) => {
         if (!user) {
-          throw new NotFoundError('Пользователь по указанному id не найден');
+          throw new NotFoundError('Пользователь с таким id не найден');
         }
-
         res.send({ user });
       })
-      .catch(next);
+      .catch((err) => {
+        if (err.name === 'CastError') {
+          next(new ValueError(err.message));
+        } else {
+          next(err);
+        }
+      });
   }
-
-  if (req.params.id !== 'me') {
+  if (req.params.id !== 'me' && req.params.id !== undefined) {
     findUser(req.params.id);
   } else {
     findUser(req.user._id);

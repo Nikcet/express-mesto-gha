@@ -1,20 +1,20 @@
 /* eslint-disable max-len */
 const Card = require('../models/cardSchema');
 
-const { ValueError } = require('../errors/value-error');
-const { NotFoundError } = require('../errors/not-found-error');
-const { ForbiddenError } = require('../errors/forbidden-error');
+const ValueError = require('../errors/value-error');
+const NotFoundError = require('../errors/not-found-error');
+const ForbiddenError = require('../errors/forbidden-error');
 
 // Создает карточку
 module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
     .then((newCard) => {
-      res.send({ data: newCard })
+      res.send({ id: newCard._id });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValueError('Переданы некорректные данные при создании карточки'));
+        next(new ValueError(err.message));
       } else {
         next(err);
       }

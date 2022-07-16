@@ -65,4 +65,9 @@ userSchema.statics.findUserByCredentials = function (email, password) {
     })
 }
 
+userSchema.statics.findUserByEmail = function (email) {
+  return this.findOne({ email })
+  .then(user);
+}
+
 module.exports = mongoose.model('user', userSchema);

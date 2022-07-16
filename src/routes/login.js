@@ -4,6 +4,7 @@ const {
   login,
   createUser,
 } = require('../controllers/users');
+const linkRegExp = require('../utils/regexp');
 
 router.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -16,7 +17,7 @@ router.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().min(2).pattern(/(https?:\/\/)([da-z.-]+).([a-z.]{2,6})([\\/w.-]*)*\/?$#?/),
+    avatar: Joi.string().min(2).pattern(linkRegExp),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
   }),

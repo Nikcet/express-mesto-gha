@@ -6,6 +6,7 @@ const {
   updateProfile,
   updateAvatar,
 } = require('../controllers/users');
+const linkRegExp = require('../utils/regexp');
 
 const { auth } = require('../middlewares/auth');
 
@@ -18,14 +19,14 @@ router.patch('/users/me', auth, celebrate({
 
 router.patch('/users/me/avatar', auth, celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().min(2).pattern(/(https?:\/\/)([da-z.-]+).([a-z.]{2,6})([\\/w.-]*)*\/?$#?/),
+    avatar: Joi.string().min(2).pattern(linkRegExp),
   }),
 }), updateAvatar);
 
 router.get('/users/me', auth, getUser);
 
 router.get('/users/:id', auth, celebrate({
-  body: Joi.object().keys({
+  params: Joi.object().keys({
     id: Joi.string().length(24).hex().required(),
   }),
 }), getUser);

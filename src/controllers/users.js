@@ -20,23 +20,28 @@ module.exports.createUser = (req, res, next) => {
         throw new ValueError('Переданы некорректные данные при создании пользователя');
       }
 
-      if (User.findUserByEmail) {
-        throw new BadRequestError('Такой пользователь уже существует');
-      }
-
-      User.create({
-        name, about, avatar, email, password: hash,
-      })
-        .then((newUser) => {
-          if (!newUser) {
-            throw new ValueError('Переданы некорректные данные при создании пользователя');
+      User.findUserByEmail(email)
+        .then((user) => {
+          if (user) {
+            throw new BadRequestError('Такой пользователь уже существует');
+          } else {
+            User.create({
+              name, about, avatar, email, password: hash,
+            })
+              .then((newUser) => {
+                if (!newUser) {
+                  throw new ValueError('Переданы некорректные данные при создании пользователя');
+                }
+                res.send({ data: { name, about, avatar, email } });
+              })
+              .catch(next);
           }
-          res.send({ data: { name, about, avatar, email } });
         })
         .catch(next);
-
     })
-    .catch(next);
+    .catch((err) => {
+      next(err);
+    });
 
 };
 

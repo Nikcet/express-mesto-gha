@@ -8,10 +8,27 @@ const {
   removeLike,
 } = require('../controllers/cards');
 
-router.post('/cards', createCard);
-router.get('/cards', getCards);
-router.delete('/cards/:id', deleteCard);
-router.put('/cards/:cardId/likes', setLike);
-router.delete('/cards/:cardId/likes', removeLike);
+const { auth } = require('../middlewares/auth');
+
+
+router.post('/cards', auth, celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2),
+    link: Joi.string().min(2).pattern(new RegExp('(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$#?'))
+  })
+}), createCard);
+
+router.get('/cards', auth, getCards);
+
+router.delete('/cards/:id', auth, celebrate({
+  body: Joi.object().keys({
+    id: Joi.string().length(24).hex().required()
+  })
+}), deleteCard);
+
+router.put('/cards/:cardId/likes', auth, setLike);
+
+router.delete('/cards/:cardId/likes', auth, removeLike);
+
 
 module.exports = router;

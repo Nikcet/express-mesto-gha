@@ -11,6 +11,7 @@ const loginRouter = require('./src/routes/login');
 const { cors } = require('./src/utils/cors');
 const NotFoundError = require('./src/errors/not-found-error');
 const { auth } = require('./src/middlewares/auth');
+
 const { PORT = 3000 } = process.env;
 
 const app = express();

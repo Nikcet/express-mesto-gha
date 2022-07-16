@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const validator = require('validator');
 const User = require('../models/userSchema');
 const AuthError = require('../errors/authorization-error');
 const ValueError = require('../errors/value-error');
@@ -15,10 +14,6 @@ module.exports.createUser = (req, res, next) => {
 
   bcrypt.hash(password, 10)
     .then((hash) => {
-      if (!validator.isEmail(email)) {
-        throw new ValueError('Переданы некорректные данные при создании пользователя');
-      }
-
       User.findUserByEmail(email)
         .then((user) => {
           if (user) {

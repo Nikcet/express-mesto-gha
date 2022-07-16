@@ -26,7 +26,7 @@ module.exports.getCards = (req, res, next) => {
   Card.find({})
     .populate('owner')
     .then((cards) => {
-      res.send({ cardList: cards })
+      res.send({ cardList: cards });
     })
     .catch(next);
 };
@@ -35,11 +35,11 @@ module.exports.getCards = (req, res, next) => {
 module.exports.deleteCard = (req, res, next) => {
   const { id } = req.params;
   Card.findById(id)
-    .onFail(() => {
-      throw new NotFoundError('Карточка по указанному id не найдена')
+    .orFail(() => {
+      throw new NotFoundError('Карточка по указанному id не найдена');
     })
     .then((card) => {
-      if (card.owner.equals(req.user._id)) {
+      if (!card.owner.equals(req.user._id)) {
         throw new ForbiddenError('Нельзя удалить чужую карточку');
       }
       return card.remove()

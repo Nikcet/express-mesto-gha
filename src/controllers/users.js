@@ -7,7 +7,6 @@ const ValueError = require('../errors/value-error');
 const NotFoundError = require('../errors/not-found-error');
 const BadRequestError = require('../errors/bad-request-error');
 
-
 // Создание пользователя
 module.exports.createUser = (req, res, next) => {
   const {
@@ -32,7 +31,11 @@ module.exports.createUser = (req, res, next) => {
                 if (!newUser) {
                   throw new ValueError('Переданы некорректные данные при создании пользователя');
                 }
-                res.send({ data: { name, about, avatar, email } });
+                res.send({
+                  data: {
+                    name, about, avatar, email,
+                  },
+                });
               })
               .catch(next);
           }
@@ -42,7 +45,6 @@ module.exports.createUser = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
-
 };
 
 // Получение списка пользователей
@@ -51,8 +53,7 @@ module.exports.getUsers = (req, res, next) => {
     .then((users) => {
       res.send({ usersList: users });
     })
-    .catch(err => {
-      console.log(err);
+    .catch((err) => {
       next(err);
     });
 };
@@ -74,7 +75,7 @@ module.exports.getUser = (req, res, next) => {
           next(err);
         }
       });
-  }
+  };
   if (req.params.id !== 'me' && req.params.id !== undefined) {
     findUser(req.params.id);
   } else {
@@ -87,13 +88,11 @@ module.exports.updateProfile = (req, res, next) => {
   const {
     name = req.params.name,
     about = req.params.about,
-    email = req.params.email,
-    password = req.params.password,
   } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
     {
-      name, about
+      name, about,
     },
     {
       new: true,
@@ -105,7 +104,7 @@ module.exports.updateProfile = (req, res, next) => {
         throw new NotFoundError('Пользователь по указанному id не найден');
       }
       res.send({
-        name: user.name, about: user.about
+        name: user.name, about: user.about,
       });
     })
     .catch((err) => {
@@ -143,7 +142,6 @@ module.exports.updateAvatar = (req, res, next) => {
     });
 };
 
-
 // Авторизация
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
@@ -153,7 +151,7 @@ module.exports.login = (req, res, next) => {
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
-        { expiresIn: '7d' }
+        { expiresIn: '7d' },
       );
       if (!token) {
         throw new AuthError('Не удалось авторизоваться');
@@ -166,10 +164,10 @@ module.exports.login = (req, res, next) => {
             maxAge: 3600000 * 24 * 7,
             httpOnly: true,
             sameSite: true,
-            secure: true
-          }
-        )
-      res.send({ token: token });
+            secure: true,
+          },
+        );
+      res.send({ token });
     })
     .catch(next);
 };

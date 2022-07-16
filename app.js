@@ -10,7 +10,7 @@ const cardRouter = require('./src/routes/cards');
 const loginRouter = require('./src/routes/login');
 const { cors } = require('./src/utils/cors');
 const NotFoundError = require('./src/errors/not-found-error');
-
+const { auth } = require('./src/middlewares/auth');
 const { PORT = 3000 } = process.env;
 
 const app = express();
@@ -31,7 +31,7 @@ app.use('/', loginRouter);
 app.use('/', userRouter);
 app.use('/', cardRouter);
 
-app.use((req, res, next) => {
+app.use(auth, (req, res, next) => {
   next(new NotFoundError('Путь не найден'));
 });
 
@@ -42,8 +42,9 @@ app.use((err, req, res, next) => {
   res.status(statusCode).send({
     message: statusCode === 500
       ? 'На сервере произошла ошибка'
-      : message
+      : message,
   });
+  next();
 });
 
 app.listen(PORT, () => {

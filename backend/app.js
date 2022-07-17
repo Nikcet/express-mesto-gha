@@ -5,12 +5,13 @@ const { default: mongoose } = require('mongoose');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-const userRouter = require('./src/routes/users');
-const cardRouter = require('./src/routes/cards');
-const loginRouter = require('./src/routes/login');
-const { cors } = require('./src/utils/cors');
-const NotFoundError = require('./src/errors/not-found-error');
-const { auth } = require('./src/middlewares/auth');
+const userRouter = require('./routes/users');
+const cardRouter = require('./routes/cards');
+const loginRouter = require('./routes/login');
+const { cors } = require('./utils/cors');
+const NotFoundError = require('./errors/not-found-error');
+const { auth } = require('./middlewares/auth');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 
@@ -28,9 +29,13 @@ app.use(cookieParser());
 app.use(cors);
 app.use(helmet());
 
+app.use(requestLogger);
+
 app.use('/', loginRouter);
 app.use('/', userRouter);
 app.use('/', cardRouter);
+
+app.use(errorLogger);
 
 app.use(auth, (req, res, next) => {
   next(new NotFoundError('Путь не найден'));

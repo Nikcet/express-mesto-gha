@@ -3,17 +3,7 @@ const AuthError = require('../errors/authorization-error');
 
 module.exports.auth = (req, res, next) => {
   const { NODE_ENV, JWT_SECRET } = process.env;
-  const { authorization } = req.headers;
-  let token;
-  if ((!authorization || !authorization.startsWith('Bearer ')) && !req.cookies.jwt) {
-    next(new AuthError('Необходима авторизация'));
-  }
-
-  if (authorization) {
-    token = authorization.replace('Bearer ', '');
-  } else {
-    token = req.cookies.jwt;
-  }
+  const token = req.cookies.jwt;
 
   let payload;
   try {

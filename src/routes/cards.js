@@ -13,8 +13,8 @@ const { auth } = require('../middlewares/auth');
 
 router.post('/cards', auth, celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2),
-    link: Joi.string().min(2).pattern(linkRegExp),
+    name: Joi.string().min(2).max(30).required(),
+    link: Joi.string().min(2).pattern(linkRegExp).required(),
   }),
 }), createCard);
 

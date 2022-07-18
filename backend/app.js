@@ -31,6 +31,12 @@ app.use(helmet());
 
 app.use(requestLogger);
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 app.use('/', loginRouter);
 app.use('/', userRouter);
 app.use('/', cardRouter);
@@ -45,7 +51,6 @@ app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
-  console.log(err.name, err.message);
   res.status(statusCode).send({
     message: statusCode === 500
       ? 'На сервере произошла ошибка'

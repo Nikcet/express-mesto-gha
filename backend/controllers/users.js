@@ -148,6 +148,7 @@ module.exports.login = (req, res, next) => {
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' },
       );
+
       if (!token) {
         throw new AuthError('Не удалось авторизоваться');
       }
@@ -158,7 +159,7 @@ module.exports.login = (req, res, next) => {
           {
             maxAge: 3600000 * 24 * 7,
             httpOnly: true,
-            sameSite: false,
+            sameSite: 'None',
             secure: true,
           },
         );

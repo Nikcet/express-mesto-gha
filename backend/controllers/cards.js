@@ -8,7 +8,12 @@ const ForbiddenError = require('../errors/forbidden-error');
 // Создает карточку
 module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
-  Card.create({ name, link, owner: req.user._id })
+  Card.create({
+    name,
+    link,
+    likes: [],
+    owner: req.user._id,
+  })
     .then((newCard) => {
       res.send({ card: newCard });
     })
@@ -64,7 +69,7 @@ module.exports.setLike = (req, res, next) => {
         throw new NotFoundError('Передан несуществующий _id карточки');
       }
 
-      return res.send({ message: 'ОК' });
+      res.send(newCard);
     })
     .catch(next);
 };
@@ -85,7 +90,7 @@ module.exports.removeLike = (req, res, next) => {
         throw new NotFoundError('Передан несуществующий id карточки');
       }
 
-      return res.send({ message: 'ОК' });
+      res.send(newCard);
     })
     .catch(next);
 };

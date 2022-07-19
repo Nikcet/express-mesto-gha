@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const jwt = require('jsonwebtoken');
 const AuthError = require('../errors/authorization-error');
 
@@ -10,6 +11,7 @@ module.exports.auth = (req, res, next) => {
       token,
       NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
     );
+    // console.log('С токеном все ок');
   } catch (err) {
     next(new AuthError('Необходима авторизация'));
   }

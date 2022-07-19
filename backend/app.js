@@ -5,13 +5,14 @@ const { default: mongoose } = require('mongoose');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+const cors = require('cors');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const loginRouter = require('./routes/login');
-const { cors } = require('./utils/cors');
 const NotFoundError = require('./errors/not-found-error');
 const { auth } = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { allowedUrls } = require('./utils/allowedUrls');
 
 const { PORT = 3000 } = process.env;
 
@@ -26,8 +27,11 @@ mongoInit().catch((err) => console.log(err));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors);
 app.use(helmet());
+app.use(cors({
+  origin: allowedUrls,
+  credentials: true,
+}));
 
 app.use(requestLogger);
 

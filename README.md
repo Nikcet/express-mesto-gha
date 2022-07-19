@@ -16,8 +16,6 @@
 - Node.js; 
 - Express;
 - MongoDB;
-
-
 - Webpack;
 - ESLint;
 

@@ -22,9 +22,7 @@ async function mongoInit() {
   await mongoose.connect('mongodb://localhost:27017/mestodb');
 }
 
-app.use(cors({
-  credentials: true,
-}));
+app.use(cors());
 
 mongoInit().catch((err) => console.log(err));
 

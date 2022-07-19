@@ -3,7 +3,6 @@ const AuthError = require('../errors/authorization-error');
 
 module.exports.auth = (req, res, next) => {
   const { NODE_ENV, JWT_SECRET } = process.env;
-  console.log(req.cookies.jwt);
   const token = req.cookies.jwt;
   let payload;
   try {

@@ -12,7 +12,7 @@ const loginRouter = require('./routes/login');
 const NotFoundError = require('./errors/not-found-error');
 const { auth } = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { allowedUrls } = require('./utils/allowedUrls');
+// const { allowedUrls } = require('./utils/allowedUrls');
 
 const { PORT = 3000 } = process.env;
 
@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
 app.use(cors({
-  origin: allowedUrls,
+  origin: '*',
   credentials: true,
 }));
 

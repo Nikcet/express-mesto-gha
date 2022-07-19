@@ -9,14 +9,14 @@ module.exports.cors = (req, res, next) => {
   const { method } = req;
 
   if (allowedUrls.includes(origin)) {
-    res.set('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Origin', origin);
   }
 
   if (method === 'OPTIONS') {
-    res.set('Access-Control-Allow-Headers', requestHeaders);
-    res.set('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-    res.set('Access-Control-Allow-Credentials', 'true');
-    // return res.end();
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    return res.end();
   }
 
   next();

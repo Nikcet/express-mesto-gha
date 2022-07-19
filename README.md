@@ -1,6 +1,7 @@
 [![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
-# Учебный проект Mesto фронтенд + бэкенд
+# Учебный проект Mesto
 Социальная сеть.
+
 Пользователь может: 
 1. Зарегистрироваться;
 2. Авторизоваться;
@@ -15,6 +16,8 @@
 - Node.js; 
 - Express;
 - MongoDB;
+
+
 - Webpack;
 - ESLint;
 

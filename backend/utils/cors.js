@@ -1,6 +1,7 @@
+/* eslint-disable consistent-return */
 const { allowedUrls } = require('./allowedUrls');
 
-module.exports.cors = (req, res) => {
+module.exports.cors = (req, res, next) => {
   const requestHeaders = req.headers['access-control-request-headers'];
   const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
   const { origin } = req.headers;
@@ -13,7 +14,8 @@ module.exports.cors = (req, res) => {
   if (method === 'OPTIONS') {
     res.header('Access-Control-Allow-Headers', requestHeaders);
     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+    return res.end();
   }
 
-  return res.end();
+  next();
 };

@@ -19,8 +19,9 @@
 - ESLint;
 
 ## Запуск проекта
-`npm run dev` - в папке backend запускает dev-сервер бэкенда
-`npm run start` — в папке frontend запускает dev-сервер фронтенда
+`npm run dev` - в папке backend запускает dev-сервер бэкенда;
+
+`npm run start` — в папке frontend запускает dev-сервер фронтенда.
 
 ## Ссылка на проект
 [https://mesto.edu.nomoredomains.xyz](https://mesto.edu.nomoredomains.xyz)

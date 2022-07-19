@@ -1,31 +1,26 @@
 [![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
-# Проект Mesto фронтенд + бэкенд
+# Учебный проект Mesto фронтенд + бэкенд
+Социальная сеть.
+Пользователь может: 
+1. Зарегистрироваться;
+2. Авторизоваться;
+3. Добавлять и удалять контент (последнее - только свой); 
+4. Редактировать информацию о себе (имя, описание, аватар);
 
+Контент и данные о пользователях лежат в Mongo DB.
 
-
-## Настройка бейджей статуса тестов
-Перед началом работы над проектом рекомендуется исправить бейджи, отражающие статус прохождения тестов.
-Для этого замените разметку бейджей на следующий фрагмент, подставив вместо `${имя_пользователя}` и `${имя_репозитория}` соответствующие значения.
-
-```
-[![Tests for sprint 13](https://github.com/Nikcet/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/Nikcet/express-mesto-gha/actions/workflows/tests-13-sprint.yml) 
-
-[![Tests for sprint 14](https://github.com/Nikcet/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/Nikcet/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
-```
-
-
-## Директории
-
-`/routes` — папка с файлами роутера  
-`/controllers` — папка с файлами контроллеров пользователя и карточки   
-`/models` — папка с файлами описания схем пользователя и карточки  
-  
-Остальные директории вспомогательные, создаются при необходимости разработчиком
+## Стек технологий
+- JavaScript (ES6);
+- React;
+- Node.js; 
+- Express;
+- MongoDB;
+- Webpack;
+- ESLint;
 
 ## Запуск проекта
+`npm run dev` - в папке backend запускает dev-сервер бэкенда
+`npm run start` — в папке frontend запускает dev-сервер фронтенда
 
-`npm run start` — запускает сервер   
-`npm run dev` — запускает сервер с hot-reload
-
-## Ссылка на репозиторий
-[https://github.com/Nikcet/express-mesto-gha](https://github.com/Nikcet/express-mesto-gha)
+## Ссылка на проект
+[https://mesto.edu.nomoredomains.xyz](https://mesto.edu.nomoredomains.xyz)

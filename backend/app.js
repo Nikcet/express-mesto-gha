@@ -5,7 +5,8 @@ const { default: mongoose } = require('mongoose');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-const cors = require('cors');
+// const cors = require('cors');
+const { cors } = require('./utils/cors');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const loginRouter = require('./routes/login');
@@ -22,10 +23,12 @@ async function mongoInit() {
   await mongoose.connect('mongodb://localhost:27017/mestodb');
 }
 
-app.use(cors({
-  origin: ['https://mesto.edu.nomoredomains.xyz', 'https://api.mesto.edu.nomoredomains.xyz'],
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: ['https://mesto.edu.nomoredomains.xyz', 'https://api.mesto.edu.nomoredomains.xyz'],
+//   credentials: true,
+// }));
+
+app.use(cors);
 
 mongoInit().catch((err) => console.log(err));
 

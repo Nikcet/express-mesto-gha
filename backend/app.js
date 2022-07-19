@@ -24,7 +24,7 @@ async function mongoInit() {
 }
 
 // app.use(cors({
-//   origin: ['https://mesto.edu.nomoredomains.xyz', 'https://api.mesto.edu.nomoredomains.xyz'],
+//   origin: allowedUrls,
 //   credentials: true,
 // }));
 
